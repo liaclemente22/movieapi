@@ -1,0 +1,18 @@
+*{
+font-family: "monaco", monospace;
+background-color: aliceblue;
+}
+
+
+
+
+body {
+	 text-align: center;
+	}
+
+.profile{
+	border-radius: 150px;
+	height:200px;
+	width: 200px;
+}
+
