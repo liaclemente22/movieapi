@@ -1,17 +1,27 @@
 const express = require('express');
-const { createMovie, getAllMovies, getMovieById, addComment } = require('../controllers/movie');
+const {
+  createMovie,
+  getAllMovies,
+  getMovieById,
+  addComment,
+  deleteMovie,
+  updateMovie
+} = require('../controllers/movie');
 const { verifyToken, verifyAdmin } = require('../middleware/auth');
 const router = express.Router();
 
-router.get('/', getAllMovies);
-router.get('/:id', getMovieById);
+// Public routes
+router.get('/getMovies', getAllMovies);
+router.get('/getMovie/:id', getMovieById);
 
-router.use(verifyToken); // Protect below routes with authentication
+// Authenticated routes (commenting, etc.)
+router.use(verifyToken);
+router.post('/addMovieComment', addComment);
 
-router.post('/:movieId/comment', addComment);
-
-router.use(verifyAdmin); // Protect with admin middleware for CRUD
-
-router.post('/', createMovie);
+// Admin-only routes (CRUD)
+router.use(verifyAdmin);
+router.post('/addMovie', createMovie);
+router.put('/updateMovie/:id', updateMovie);
+router.delete('/deleteMovie/:id', deleteMovie);
 
 module.exports = router;
