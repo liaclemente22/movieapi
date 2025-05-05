@@ -1,30 +1,32 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const cors = require('cors'); // Import cors
+const cors = require('cors'); // Importing cors
 const userRoutes = require('./routes/user');
-const movieRoutes = require('./routes/movie');
+const workoutRoutes = require('./routes/workout');
+const mealRoutes = require('./routes/meal');
 
 dotenv.config();
-
 const app = express();
 
-// Enable CORS for your frontend URL (localhost:3000)
+// CORS configuration
 app.use(cors({
-  origin: 'http://localhost:3000',  // Allow only the frontend from localhost:3000
+  origin: [
+    'http://localhost:3000',               
+    'https://csp2-fitnessapi.onrender.com' 
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true  // Allows cookies to be sent with requests
+  credentials: true  
 }));
 
 app.use(express.json());
 
-app.use('/api/user', userRoutes);
-app.use('/api/movies', movieRoutes);
+// Define routes
+app.use('/users', userRoutes);
+app.use('/workouts', workoutRoutes);
+app.use('/meals', mealRoutes);
 
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.log(err));
-
-app.listen(5000, () => {
-  console.log('Server is running on port 5000');
-});
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => app.listen(5000, () => console.log("Server running on port 5000")))
+  .catch(err => console.error(err));
